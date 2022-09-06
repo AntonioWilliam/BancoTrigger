@@ -1,0 +1,21 @@
+
+CREATE TRIGGER ValidaDadosConsulta
+BEFORE INSERT OR UPDATE ON consultas
+FOR EACH ROW 
+EXECUTE PROCEDURE trgValidadoesConsulta();
+
+CREATE OR REPLACE FUNCTION trgValidadoesConsulta() RETURNS TRIGGER 
+AS
+
+$$
+
+DECLARE
+pac_row record;
+espec_row record;
+
+BEGIN
+ RAISE NOTICE 'NOSSA TRIGGER RODOU!!!!!';
+   RETURN NEW;
+END
+
+$trgValidadoesConsulta LANGUAGE plpsql;
