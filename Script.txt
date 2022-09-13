@@ -1,42 +1,23 @@
-create DATABASE aula;
-use aula;
-CREATE TABLE if not exists pacientes(
-    id serial PRIMARY KEY,
-    nome varchar (40) not null,
-    sexo varchar (1),
-    obito boolean,
-    insertdAt TIMESTAMP NOT null DEFAULT NOW());
+create table pacientes(id_pacientes int generated always as identity PRIMARY KEY,
+nome varchar (48) not null,
+sexo varchar (1),
+obito boolean,
+insertedAt TIMESTAMP NOT NULL DEFAULT NOW ());
 
-CREATE TABLE if not EXISTS profissionais(
-    id serial PRIMARY KEY,
-    nome varchar (50));
+create table if not exists profissionais(id_profissionais int generated always as identity PRIMARY KEY, nome varchar (50));
 
-CREATE TABLE if not EXISTS especialidades(
-    id serial PRIMARY KEY,
-    nome varchar (50));
+create table if not exists especialidades(id_especialidades int generated always as identity PRIMARY KEY, nome varchar (50));
 
-CREATE TABLE if not EXISTS consultas(
-    id serial PRIMARY KEY,
-    especialidade_id integer,
-    pac_id integer,
-    profiss_id integer);
+create table if not exists consultas(id_consultas int generated always as identity PRIMARY KEY,id_especialidades integer,id_pacientes integer,id_profissionais integer);
 
-CREATE TABLE if not EXISTS obitos(
-    id serial PRIMARY KEY,
-	obs text
-);
-
+create table if not exists obitos(id_obitos int generated always as identity PRIMARY KEY,obs text);
 
 
 ALTER TABLE consultas
-ADD CONSTRAINT FkEspecialidadeDaConsulta FOREIGN KEY (especialidade_id) 
-REFERENCES 
-	especialidades(id);
-    
-ALTER TABLE consultas
-ADD CONSTRAINT FkProfissionalDaConsulta FOREIGN KEY (profiss_id)
+ADD CONSTRAINT FKEspecialidadeDaConsulta FOREIGN KEY
+(id_especialidades)
 REFERENCES
-	profissionais(id);
+especialidades (id_especialidades);
 
 insert into especialidades (nome) values ('urologista');
 insert into especialidades (nome) values ('ginecologista');
@@ -44,18 +25,42 @@ insert into especialidades (nome) values ('clinica geral');
 
 select * from especialidades;
 
-insert into profissionais (nome) values ('Dr. Fell GoodUro');
-insert into profissionais (nome) values ('Dr. JekyllGineco');
-insert into profissionais (nome) values ('Dr. Ray');
+insert into profissionais (nome) values ('DrFeelGoodUro');
+insert into profissionais (nome) values ('DrJekllGineco');
+insert into profissionais (nome) values ('DrRay');
 
 select * from profissionais;
 
-insert into pacientes (nome,sexo,obito) values ('Ada Lovelace','f','f');
-insert into pacientes (nome,sexo,obito) values ('Donald Knuth','m','f');
-insert into pacientes (nome,sexo,obito) values ('Grace Hopper','f','f');
-insert into pacientes (nome,sexo,obito) values ('Dennis Ritchie','m','f');
 
+insert into pacientes (nome, sexo) values ('Ada LoveLace', 'F');
+insert into pacientes (nome, sexo) values ('Donald Knuth', 'M');
+insert into pacientes (nome, sexo) values ('Grace Hopper', 'F');
+insert into pacientes (nome, sexo) values ('Dennis Ritchie', 'M');
 
 select * from pacientes;
 
+insert into consultas (id_especialidades, id_pacientes, id_profissionais) values ('3', '3', '2');
+
 select * from consultas;
+
+
+UPDATE
+  consultas
+SET
+  id_profissionais = 1
+WHERE
+  id_consultas = 2 
+
+
+
+CREATE OR REPLACE FUNCTION trgValidaDadosConsulta()
+RETURNS trigger AS $$
+BEGIN RAISE NOTICE 'NOSSA TRIGGER RODOU!!!!!';RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER ValidaDadosConsulta
+AFTER INSERT OR UPDATE ON consultas
+FOR EACH ROW --FOR EACH STATEMENT
+EXECUTE PROCEDURE trgValidaDadosConsulta();
