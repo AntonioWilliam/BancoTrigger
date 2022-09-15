@@ -1,21 +1,11 @@
+CREATE OR REPLACE FUNCTION trgValidaDadosConsulta()
+RETURNS trigger AS $$
+BEGIN RAISE NOTICE 'NOSSA TRIGGER RODOU!!!!!';RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
 
 CREATE TRIGGER ValidaDadosConsulta
-BEFORE INSERT OR UPDATE ON consultas
-FOR EACH ROW 
-EXECUTE PROCEDURE trgValidadoesConsulta();
-
-CREATE OR REPLACE FUNCTION trgValidadoesConsulta() RETURNS TRIGGER 
-AS
-
-$$
-
-DECLARE
-pac_row record;
-espec_row record;
-
-BEGIN
- RAISE NOTICE 'NOSSA TRIGGER RODOU!!!!!';
-   RETURN NEW;
-END
-
-$trgValidadoesConsulta LANGUAGE plpsql;
+AFTER INSERT OR UPDATE ON consultas
+FOR EACH ROW --FOR EACH STATEMENT
+EXECUTE PROCEDURE trgValidaDadosConsulta();
