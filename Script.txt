@@ -53,7 +53,7 @@ REFERENCES
     profissionais(id);
 
     insert into pacientes (nome, sexo) values ('Ricardo Lima','m');
-    insert int especialidades (nome) values ('ginecologista');
+    insert into especialidades (nome) values ('ginecologista');
 
     CREATE OR REPLACE FUNCTION trgValidaDadosConsulta()  RETURNS trigger AS $trgValidaDadosConsulta$
 
