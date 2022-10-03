@@ -4,6 +4,7 @@ drop table especialidades;
 drop table consultas;
 drop table obitos;
 
+
 create table if not exists pacientes(
        id serial PRIMARY KEY,
        nome varchar(40) not null,
@@ -44,10 +45,17 @@ ADD CONSTRAINT FkProfissionalDaConsulta FOREIGN KEY
 REFERENCES
     profissionais(id);
 
+
+ALTER TABLE 
+ADD CONSTRAINT FkProfissionalDaConsulta FOREIGN KEY   
+    (profiss_id)
+REFERENCES
+    profissionais(id);
+
     insert into pacientes (nome, sexo) values ('Ricardo Lima','m');
     insert int especialidades (nome) values ('ginecologista');
 
-    REATE OR REPLACE FUNCTION trgValidaDadosConsulta()  RETURNS trigger AS $trgValidaDadosConsulta$
+    CREATE OR REPLACE FUNCTION trgValidaDadosConsulta()  RETURNS trigger AS $trgValidaDadosConsulta$
 
 DECLARE
  linhaPac record;
@@ -65,9 +73,9 @@ BEGIN
         *  FROM especialidades as esp where esp.id = NEW.especialidade_id;
 
         IF linhaPac.sexo = 'm' AND espec_row.nome = 'ginecologista' THEN
-           RAISE EXCEPTION 'Ginecologista apenas para pacientes do sexo feminino';
+           RAISE EXCEPTION 'Ginecologista apenas para paciente do sexo feminino';
         ELSEIF linhaPac.sexo = 'f' AND espec_row.nome = 'urologista' THEN
-           RAISE EXCEPTION 'Urologista apenas para pacientes do sexo masculino';
+           RAISE EXCEPTION 'Urologista apenas para paciente do sexo masculino';
         END IF;
         
         
@@ -77,6 +85,6 @@ END;
 $trgValidaDadosConsulta$ LANGUAGE plpgsql; 
 
 CREATE TRIGGER ValidaDadosConsulta
-BEFORE INSERT OR UPDATE ON consultas
+BEFORE INSERT OR UPDATE ON 
 FOR EACH ROW --FOR EACH STATEMENT
 EXECUTE PROCEDURE trgValidaDadosConsulta();
