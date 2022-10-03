@@ -1,9 +1,8 @@
 drop table pacientes;
+drop table consultas;
 drop table profissionais;
 drop table especialidades;
-drop table consultas;
 drop table obitos;
-
 
 create table if not exists pacientes(
        id serial PRIMARY KEY,
@@ -52,10 +51,9 @@ ADD CONSTRAINT FkProfissionalDaConsulta FOREIGN KEY
 REFERENCES
     profissionais(id);
 
-    insert into pacientes (nome, sexo) values ('Ricardo Lima','m');
-    insert into especialidades (nome) values ('ginecologista');
+    
 
-    CREATE OR REPLACE FUNCTION trgValidaDadosConsulta()  RETURNS trigger AS $trgValidaDadosConsulta$
+ /*   CREATE OR REPLACE FUNCTION trgValidaDadosConsulta()  RETURNS trigger AS $trgValidaDadosConsulta$
 
 DECLARE
  linhaPac record;
@@ -87,4 +85,4 @@ $trgValidaDadosConsulta$ LANGUAGE plpgsql;
 CREATE TRIGGER ValidaDadosConsulta
 BEFORE INSERT OR UPDATE ON 
 FOR EACH ROW --FOR EACH STATEMENT
-EXECUTE PROCEDURE trgValidaDadosConsulta();
+EXECUTE PROCEDURE trgValidaDadosConsulta(); */
